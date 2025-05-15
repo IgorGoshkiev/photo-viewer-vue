@@ -6,3 +6,9 @@ export interface Photo {
   url: string;
   thumbnailUrl: string;
 }
+
+// Определяем тип для колонок
+export interface Column {
+  key: keyof Photo;
+  label: string;
+}

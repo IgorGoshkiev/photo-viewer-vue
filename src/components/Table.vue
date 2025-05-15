@@ -28,8 +28,8 @@
             :key="photo.id"
             :class="`table-row--${themeStore.theme}`"
           >
-            <td :title="photo.id">{{ photo.id }}</td>
-            <td :title="photo.albumId">{{ photo.albumId }}</td>
+            <td :title="getTitle(photo.id)">{{ photo.id }}</td>
+            <td :title="getTitle(photo.albumId)">{{ photo.albumId }}</td>
             <td class="truncate" :title="photo.title">{{ photo.title }}</td>
             <td class="truncate">
               <a :href="photo.url" target="_blank" :class="`link--${themeStore.theme}`">Ссылка</a>
@@ -63,12 +63,13 @@
   import { usePhotosStore } from '@/stores/photosStore';
   import { useThemeStore } from '@/stores/themeStore';
   import type { Photo } from '@/types/photo';
+  import type { Column } from '@/types/photo';
 
   const photosStore = usePhotosStore();
   const themeStore = useThemeStore();
   const tableContainer = ref<HTMLDivElement | null>(null);
 
-  const columns = [
+  const columns: Column[] = [
     { key: 'id', label: 'ID' },
     { key: 'albumId', label: 'Альбом' },
     { key: 'title', label: 'Название' },
@@ -82,6 +83,10 @@
     if (scrollTop + clientHeight >= scrollHeight - 50 && !photosStore.isLoading) {
       photosStore.loadMore();
     }
+  };
+
+  const getTitle = (value: string | number): string => {
+    return String(value);
   };
 
   onMounted(() => {
