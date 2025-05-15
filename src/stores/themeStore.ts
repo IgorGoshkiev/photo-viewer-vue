@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 export const useThemeStore = defineStore('theme', () => {
   const theme = ref<'light' | 'dark'>(
@@ -8,9 +8,13 @@ export const useThemeStore = defineStore('theme', () => {
 
   const toggleTheme = () => {
     theme.value = theme.value === 'light' ? 'dark' : 'light';
-    document.documentElement.classList.toggle('dark', theme.value === 'dark');
     localStorage.setItem('theme', theme.value);
   };
+
+  // Применяем тему при загрузке
+  watch(() => theme.value, (newTheme) => {
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  }, { immediate: true });
 
   return { theme, toggleTheme };
 });

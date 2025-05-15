@@ -1,8 +1,8 @@
 <template>
   <header class="header">
-    <Logo :theme="themeStore.theme" />
-    
-    <Button 
+    <Logo :theme="themeStore.theme" clickable to="/" />
+
+     <Button 
       :theme="themeStore.theme"
       variant="icon" 
       :icon="themeStore.theme === 'light' ? 'moon' : 'sun'"
@@ -13,9 +13,9 @@
       <Input
         v-model="searchQuery"
         :theme="themeStore.theme"
+        placeholder="Введите ID альбомов через пробел"
         @search="handleSearch"
       />
-
       <Button 
         :theme="themeStore.theme"
         variant="primary"
@@ -24,39 +24,48 @@
         @click="handleSearch"
       />
     </div>
+    
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { usePhotosStore } from '@/stores/photosStore';
-import { useThemeStore } from '@/stores/themeStore';
-import Logo from '@/components/Logo.vue';
-import Button from '@/components/Button.vue';
-import Input from '@/components/InputSearch.vue';
+  import { ref, watch, onMounted } from 'vue';
+  import { usePhotosStore } from '@/stores/photosStore';
+  import { useThemeStore } from '@/stores/themeStore';
+  import Logo from '@/components/Logo.vue';
+  import Button  from '@/components/Button.vue';
+  import Input from '@/components/InputSearch.vue';
 
-const photosStore = usePhotosStore();
-const themeStore = useThemeStore();
-const searchQuery = ref(photosStore.selectedAlbums.join(' '));
+  const photosStore = usePhotosStore();
+  const themeStore = useThemeStore();
+  const searchQuery = ref('');
 
-const handleSearch = () => {
-  const albums = searchQuery.value.split(' ').filter(Boolean);
-  photosStore.setSelectedAlbums(albums);
-};
+  onMounted(() => {
+    searchQuery.value = ''; // сбрасываем значение input
+  });
+
+  watch(() => photosStore.selectedAlbums, (newAlbums) => {
+    searchQuery.value = newAlbums.join(' ');
+  }, { immediate: true });
+
+  const handleSearch = () => {
+    photosStore.setSelectedAlbums(searchQuery.value.split(' '));
+  };
 </script>
 
 <style scoped>
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  margin-bottom: 20px;
   gap: 20px;
   flex-wrap: wrap;
 }
 
 .search-container {
-  display: flex;
+ display: flex;
   gap: 12px;
   flex-grow: 1;
   max-width: 600px;

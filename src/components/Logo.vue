@@ -9,42 +9,42 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+  import { computed } from 'vue'
+  import { useRouter } from 'vue-router'
 
-const props = defineProps({
-  theme: {
-    type: String,
-    default: 'light',
-    validator: (value: string) => ['light', 'dark'].includes(value)
-  },
-  size: {
-    type: String,
-    default: '24px',
-  },
-  clickable: {
-    type: Boolean,
-    default: false,
-  },
-  to: {
-    type: [String, Object],
-    default: null,
-  },
-})
+  const props = defineProps({
+    theme: {
+      type: String,
+      default: 'light',
+      validator: (value: string) => ['light', 'dark'].includes(value)
+    },
+    size: {
+      type: String,
+      default: '24px',
+    },
+    clickable: {
+      type: Boolean,
+      default: false,
+    },
+    to: {
+      type: [String, Object],
+      default: null,
+    },
+  })
 
-const emit = defineEmits(['click'])
-const router = useRouter()
+  const emit = defineEmits(['click'])
+  const router = useRouter()
 
-const textColor = computed(() => {
-  return props.theme === 'dark' ? 'white' : 'red'
-})
+  const textColor = computed(() => {
+    return props.theme === 'dark' ? 'white' : 'red'
+  })
 
-const handleClick = () => {
-  if (props.clickable) {
-    if (props.to) router.push(props.to)
-    emit('click')
+  const handleClick = () => {
+    if (props.clickable) {
+      if (props.to) router.push(props.to)
+      emit('click')
+    }
   }
-}
 </script>
 
 <style scoped>

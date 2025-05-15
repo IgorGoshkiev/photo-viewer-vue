@@ -26,7 +26,7 @@
           <tr 
             v-for="photo in photosStore.visiblePhotos" 
             :key="photo.id"
-            :class="`table-row--${themeStore.theme}`"
+            :class="`table-row--${theme}`"
           >
             <td :title="photo.id">{{ photo.id }}</td>
             <td :title="photo.albumId">{{ photo.albumId }}</td>
